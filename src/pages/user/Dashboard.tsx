@@ -1,6 +1,6 @@
 
 import { Link } from 'react-router-dom'
-import type { Topic } from '../data/topics'
+import type { Topic } from '../../data/topics'
 
 type DashboardProps = {
   topics: Topic[]

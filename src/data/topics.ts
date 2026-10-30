@@ -1,5 +1,5 @@
 
-export type TopicStatus = 'completed' | 'learning' | 'available' | 'locked'
+export type TopicStatus = 'completed' | 'learning' | 'available'
 
 export type Topic = {
   id: number
@@ -113,7 +113,7 @@ export const initialTopics: Topic[] = [
     description: 'Mencoba pilihan secara sistematis dan membatalkan pilihan saat diperlukan.',
     prerequisites: ['Recursion'],
     difficulty: 'Intermediate',
-    status: 'locked',
+    status: 'available',
     slug: 'backtracking',
   },
   {
@@ -124,7 +124,7 @@ export const initialTopics: Topic[] = [
     description: 'Mengolah subarray atau substring dengan jendela yang bergerak.',
     prerequisites: ['Two Pointers'],
     difficulty: 'Intermediate',
-    status: 'locked',
+    status: 'available',
     slug: 'sliding-window',
   },
 
@@ -148,7 +148,7 @@ export const initialTopics: Topic[] = [
     description: 'Mencari bilangan prima dalam rentang tertentu secara efisien.',
     prerequisites: ['Modulo, GCD & LCM', 'Complexity Analysis'],
     difficulty: 'Intermediate',
-    status: 'locked',
+    status: 'available',
     slug: 'sieve-of-eratosthenes',
   },
   {
@@ -159,7 +159,7 @@ export const initialTopics: Topic[] = [
     description: 'Menghitung perpangkatan dalam O(log n), termasuk modulo.',
     prerequisites: ['Modulo, GCD & LCM', 'Complexity Analysis'],
     difficulty: 'Intermediate',
-    status: 'locked',
+    status: 'available',
     slug: 'fast-exponentiation',
   },
 
@@ -172,7 +172,7 @@ export const initialTopics: Topic[] = [
     description: 'Struktur data untuk pemrosesan berurutan, prioritas, dan heap.',
     prerequisites: ['STL: Vector, Pair, Set, Map'],
     difficulty: 'Intermediate',
-    status: 'locked',
+    status: 'available',
     slug: 'stack-queue-heap',
   },
   {
@@ -183,7 +183,7 @@ export const initialTopics: Topic[] = [
     description: 'Mengelola komponen yang saling terhubung menggunakan DSU.',
     prerequisites: ['STL: Vector, Pair, Set, Map', 'Complexity Analysis'],
     difficulty: 'Intermediate',
-    status: 'locked',
+    status: 'available',
     slug: 'disjoint-set-union',
   },
   {
@@ -194,7 +194,7 @@ export const initialTopics: Topic[] = [
     description: 'Memahami representasi graf, BFS, DFS, dan connected components.',
     prerequisites: ['STL: Vector, Pair, Set, Map', 'Recursion'],
     difficulty: 'Intermediate',
-    status: 'locked',
+    status: 'available',
     slug: 'graph-traversal',
   },
   {
@@ -205,7 +205,7 @@ export const initialTopics: Topic[] = [
     description: 'Mempelajari Dijkstra, Bellman-Ford, Kruskal, dan Prim.',
     prerequisites: ['Graph Traversal', 'Disjoint Set Union', 'Stack, Queue & Heap'],
     difficulty: 'Advanced',
-    status: 'locked',
+    status: 'available',
     slug: 'shortest-path-mst',
   },
 
@@ -218,7 +218,7 @@ export const initialTopics: Topic[] = [
     description: 'Mengenali greedy choice dan membuktikan strategi greedy.',
     prerequisites: ['Sorting', 'Complexity Analysis'],
     difficulty: 'Intermediate',
-    status: 'locked',
+    status: 'available',
     slug: 'greedy-algorithms',
   },
   {
@@ -229,7 +229,7 @@ export const initialTopics: Topic[] = [
     description: 'State, transisi, base case, memoization, dan tabulation.',
     prerequisites: ['Recursion', 'Complexity Analysis'],
     difficulty: 'Intermediate',
-    status: 'locked',
+    status: 'available',
     slug: 'basic-dynamic-programming',
   },
   {
@@ -240,7 +240,7 @@ export const initialTopics: Topic[] = [
     description: 'Optimasi DP, bitmask DP, dan DP pada tree.',
     prerequisites: ['Basic Dynamic Programming', 'Graph Traversal'],
     difficulty: 'Advanced',
-    status: 'locked',
+    status: 'available',
     slug: 'advanced-dynamic-programming',
   },
 
@@ -253,7 +253,7 @@ export const initialTopics: Topic[] = [
     description: 'Query prefix sum dan update titik secara efisien.',
     prerequisites: ['Prefix Sum', 'Binary Search'],
     difficulty: 'Advanced',
-    status: 'locked',
+    status: 'available',
     slug: 'fenwick-tree',
   },
   {
@@ -264,7 +264,7 @@ export const initialTopics: Topic[] = [
     description: 'Menyelesaikan range query dan point update, serta variasi lazy propagation.',
     prerequisites: ['Prefix Sum', 'Recursion', 'Complexity Analysis'],
     difficulty: 'Advanced',
-    status: 'locked',
+    status: 'available',
     slug: 'segment-tree',
   },
 ]

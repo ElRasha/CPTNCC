@@ -72,6 +72,21 @@ export default function Sidebar({
         </button>
       </nav>
 
+      <div className="sidebar-label roadmap-label">
+        ADMINISTRATION
+      </div>
+
+      <nav className="navigation">
+        <NavLink
+          to="/admin"
+          className={({ isActive }) =>
+            `nav-item ${isActive ? 'active' : ''}`
+          }
+        >
+          <span>⚙</span> Admin dashboard
+        </NavLink>
+      </nav>
+
       <div className="sidebar-label roadmap-label">YOUR LEARNING</div>
 
       <div className="mini-progress">

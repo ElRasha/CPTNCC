@@ -7,12 +7,14 @@ import {
   useParams,
 } from 'react-router-dom'
 
-import Sidebar from './components/Sidebar'
-import Topbar from './components/Topbar'
-import Dashboard from './pages/Dashboard'
-import Topics from './pages/Topics'
-import TopicDetail from './pages/TopicDetail'
-import Roadmap from './pages/Roadmap'
+import Dashboard from './pages/user/Dashboard'
+import Topics from './pages/user/Topics'
+import TopicDetail from './pages/user/TopicDetail'
+import Roadmap from './pages/user/Roadmap'
+import Sidebar from './styles/components/Sidebar'
+import Topbar from './styles/components/Topbar'
+import AdminDashboard from './pages/admin/AdminDashboard'
+import AdminTopics from './pages/admin/AdminTopics'
 
 import { initialTopics } from './data/topics'
 import type { Topic } from './data/topics'
@@ -20,22 +22,38 @@ import './App.css'
 
 const STORAGE_KEY = 'cptncc-topics'
 
+// ============================================================
+// LOAD TOPICS
+// ============================================================
+
 function loadTopics(): Topic[] {
   try {
     const saved = localStorage.getItem(STORAGE_KEY)
 
-    if (!saved) return initialTopics
+    if (!saved) {
+      return initialTopics
+    }
 
-    const parsed = JSON.parse(saved) as Topic[]
+    const parsed: unknown = JSON.parse(saved)
 
     if (
       !Array.isArray(parsed) ||
       !parsed.every(
         (topic) =>
+          topic !== null &&
+          typeof topic === 'object' &&
           typeof topic.id === 'number' &&
           typeof topic.title === 'string' &&
+          typeof topic.category === 'string' &&
+          typeof topic.stage === 'number' &&
+          typeof topic.description === 'string' &&
           Array.isArray(topic.prerequisites) &&
-          ['completed', 'learning', 'available', 'locked'].includes(
+          topic.prerequisites.every(
+            (item: unknown) => typeof item === 'string',
+          ) &&
+          typeof topic.difficulty === 'string' &&
+          typeof topic.slug === 'string' &&
+          ['completed', 'learning', 'available'].includes(
             topic.status,
           ),
       )
@@ -43,29 +61,33 @@ function loadTopics(): Topic[] {
       return initialTopics
     }
 
-    return initialTopics.map((topic) => {
-      const savedTopic = parsed.find((item) => item.id === topic.id)
-
-      return savedTopic
-        ? { ...topic, status: savedTopic.status }
-        : topic
-    })
-  } catch {
+    return parsed as Topic[]
+  } catch (error) {
+    console.error('Gagal memuat topik:', error)
     return initialTopics
   }
 }
 
+// ============================================================
+// WORKSPACE
+// ============================================================
+
 function Workspace() {
   const [topics, setTopics] = useState<Topic[]>(loadTopics)
 
+  // Simpan semua data topik ke localStorage
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(topics))
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(topics),
+      )
     } catch (error) {
-      console.error('Gagal menyimpan progres cptncc:', error)
+      console.error('Gagal menyimpan topik CPTNCC:', error)
     }
   }, [topics])
 
+  // Toggle status completed
   function toggleCompleted(id: number) {
     setTopics((current) =>
       current.map((topic) =>
@@ -73,10 +95,33 @@ function Workspace() {
           ? {
               ...topic,
               status:
-                topic.status === 'completed' ? 'available' : 'completed',
+                topic.status === 'completed'
+                  ? 'available'
+                  : 'completed',
             }
           : topic,
       ),
+    )
+  }
+
+  // Tambah topik
+  function addTopic(newTopic: Topic) {
+    setTopics((current) => [...current, newTopic])
+  }
+
+  // Edit topik
+  function updateTopic(updatedTopic: Topic) {
+    setTopics((current) =>
+      current.map((topic) =>
+        topic.id === updatedTopic.id ? updatedTopic : topic,
+      ),
+    )
+  }
+
+  // Hapus topik
+  function deleteTopic(id: number) {
+    setTopics((current) =>
+      current.filter((topic) => topic.id !== id),
     )
   }
 
@@ -95,13 +140,19 @@ function Workspace() {
         <Topbar />
 
         <Routes>
-          <Route path="/" element={<Dashboard topics={topics} />} />
+          {/* DASHBOARD */}
+          <Route
+            path="/"
+            element={<Dashboard topics={topics} />}
+          />
 
+          {/* TOPICS CATALOG */}
           <Route
             path="/topics"
             element={<Topics topics={topics} />}
           />
 
+          {/* TOPIC DETAIL */}
           <Route
             path="/topics/:slug"
             element={
@@ -112,6 +163,7 @@ function Workspace() {
             }
           />
 
+          {/* TOPIC DETAIL WITH CATEGORY */}
           <Route
             path="/topics/:category/:slug"
             element={
@@ -122,6 +174,7 @@ function Workspace() {
             }
           />
 
+          {/* ROADMAP */}
           <Route
             path="/roadmap"
             element={
@@ -132,12 +185,34 @@ function Workspace() {
             }
           />
 
+          {/* ADMIN DASHBOARD */}
+          <Route
+            path="/admin"
+            element={<AdminDashboard topics={topics} />}
+          />
+
+          {/* MANAGE TOPICS */}
+          <Route
+            path="/admin/topics"
+            element={
+              <AdminTopics
+                topics={topics}
+                onAdd={addTopic}
+                onUpdate={updateTopic}
+                onDelete={deleteTopic}
+              />
+            }
+          />
+
+          {/* 404 */}
           <Route
             path="*"
             element={
               <div style={{ padding: 32 }}>
                 <h2>Halaman tidak ditemukan</h2>
-                <p>Periksa kembali alamat halaman yang kamu buka.</p>
+                <p>
+                  Periksa kembali alamat halaman yang kamu buka.
+                </p>
               </div>
             }
           />
@@ -146,6 +221,10 @@ function Workspace() {
     </div>
   )
 }
+
+// ============================================================
+// TOPIC DETAIL ROUTE
+// ============================================================
 
 function TopicDetailRoute({
   topics,
@@ -156,13 +235,17 @@ function TopicDetailRoute({
 }) {
   const { slug } = useParams()
 
-  const topic = topics.find((item) => item.slug === slug)
+  const topic = topics.find(
+    (item) => item.slug === slug,
+  )
 
   if (!topic) {
     return (
       <div style={{ padding: 32 }}>
         <h2>Materi tidak ditemukan</h2>
-        <p>Materi ini belum tersedia di katalog.</p>
+        <p>
+          Materi ini belum tersedia di katalog.
+        </p>
       </div>
     )
   }
@@ -170,10 +253,15 @@ function TopicDetailRoute({
   return (
     <TopicDetail
       topic={topic}
-      onToggleCompleted={onToggleCompleted}
+      topics={topics}
+      onToggleComplete={onToggleCompleted}
     />
   )
 }
+
+// ============================================================
+// APP
+// ============================================================
 
 export default function App() {
   return (

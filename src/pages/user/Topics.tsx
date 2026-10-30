@@ -1,8 +1,8 @@
 
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import type { Topic } from '../data/topics'
-import './Topics.css'
+import type { Topic } from '../../data/topics'
+import '../../styles/user/Topics.css'
 
 type TopicsProps = {
   topics: Topic[]
@@ -34,8 +34,6 @@ function statusLabel(status: Topic['status']) {
       return 'Completed'
     case 'learning':
       return 'Learning'
-    case 'locked':
-      return 'Locked'
     default:
       return 'Available'
   }

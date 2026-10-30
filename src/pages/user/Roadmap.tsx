@@ -10,8 +10,8 @@ import {
   type Node,
   type NodeProps,
 } from '@xyflow/react'
-import type { Topic } from '../data/topics'
-import './Roadmap.css'
+import type { Topic } from '../../data/topics'
+import '../../styles/user/Roadmap.css'
 
 type RoadmapProps = {
   topics: Topic[]
@@ -74,9 +74,7 @@ function TopicNode({ data }: NodeProps<Node<TopicNodeData>>) {
             ? 'Selesai'
             : topic.status === 'learning'
               ? 'Dipelajari'
-              : topic.status === 'locked'
-                ? 'Terkunci'
-                : 'Tersedia'}
+              : 'Tersedia'}
         </span>
       </div>
 
